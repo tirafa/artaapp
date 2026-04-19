@@ -20,6 +20,7 @@
   --purple: #6b5a8a;
   --teal: #2a7a6e;
   --gold: #b8922a;
+  --oleo: #7a3e2a;
   --radius: 10px;
   --shadow: 0 2px 12px rgba(26,23,18,0.10);
   --shadow-lg: 0 8px 32px rgba(26,23,18,0.18);
@@ -280,11 +281,13 @@ nav {
 .c-gouache { color: var(--teal); }
 .c-outros { color: var(--accent); }
 .c-abordagem { color: var(--gold); }
+.c-oleo { color: var(--oleo); }
 .bg-aguarela::before { background: var(--blue); }
 .bg-acrilico::before { background: var(--purple); }
 .bg-gouache::before { background: var(--teal); }
 .bg-outros::before { background: var(--accent); }
 .bg-abordagem::before { background: var(--gold); }
+.bg-oleo::before { background: var(--oleo); }
 
 /* SCROLLBAR */
 ::-webkit-scrollbar { width: 6px; }
@@ -316,6 +319,7 @@ nav {
     <button class="filter-btn" onclick="filterTech('gouache', this)">Gouache</button>
     <button class="filter-btn" onclick="filterTech('outros', this)">Outros meios</button>
     <button class="filter-btn" onclick="filterTech('abordagem', this)">Abordagens</button>
+    <button class="filter-btn" onclick="filterTech('oleo', this)">Óleo</button>
   </div>
   <div class="tech-grid" id="tech-grid"></div>
 </div>
@@ -934,6 +938,128 @@ const techniques = [
       'Funciona para qualquer tema — tenta com a tua chávena ou uma flor.',
       'Repete este exercício mensalmente para ver a tua evolução de observação.'
     ]
+  },
+
+  // ÓLEO
+  {
+    id: 28, cat: 'oleo', name: 'Alla Prima',
+    desc: 'Pintura a óleo concluída numa única sessão, fresco sobre fresco, sem esperar secagem.',
+    difficulty: 2,
+    materials: ['Tinta a óleo', 'Tela ou papel oleado', 'Pincéis de cerdas', 'Aguarrás ou óleo de linho', 'Paleta'],
+    steps: [
+      'Prepara a tela com uma camada fina de tinta diluída (underpainting rápido) — sépia ou ocre. Seca em 10 min se usares acrílico para este passo.',
+      'Estabelece as grandes massas de cor com tinta diluída em aguarrás (fase magra). Sem detalhes.',
+      'Enquanto a tinta ainda está húmida, aplica as cores finais por cima — a mistura acontece na própria tela.',
+      'Para transições suaves, passa um pincel limpo e seco sobre a zona de contacto entre duas cores.',
+      'Trabalha do geral para o específico: manchas grandes → formas → detalhes mínimos.',
+      'Deixa secar 24h antes de tocar. A tela parece húmida durante horas — não toques.'
+    ],
+    tips: [
+      'É a técnica ideal para o desafio — 1 sessão = 1 pintura completa.',
+      '"Magro sobre gordo": as primeiras camadas com mais aguarrás, as últimas com mais óleo de linho.',
+      'Óleo seca muito mais devagar — tens mais tempo para misturar que com acrílico.',
+      'Não limpes os pincéis entre cores com água — usa aguarrás ou papel de cozinha.'
+    ]
+  },
+  {
+    id: 29, cat: 'oleo', name: 'Acrílico + Óleo',
+    desc: 'Underpainting rápido com acrílico (seca em minutos) e acabamento em óleo por cima.',
+    difficulty: 2,
+    materials: ['Tinta acrílica', 'Tinta a óleo', 'Tela', 'Pincéis', 'Aguarrás'],
+    steps: [
+      'Pinta o underpainting completo em acrílico — forma, composição e valores de luz/sombra. 20–25 minutos.',
+      'Aguarda a secagem total do acrílico (10–15 min com secador, ou 30 min natural).',
+      'Sobre o acrílico seco, aplica finas camadas de óleo para cor, brilho e acabamento.',
+      'O óleo adere bem sobre acrílico — o contrário NÃO funciona (nunca acrílico sobre óleo).',
+      'Usa óleo diluído em aguarrás para camadas de cor translúcida (glazing).',
+      'Termina com óleo puro nos detalhes e nos pontos de maior luz.'
+    ],
+    tips: [
+      'Esta combinação é muito popular — o acrílico resolve a composição rapidamente e o óleo dá o acabamento rico.',
+      'Regra obrigatória: SEMPRE acrílico primeiro, óleo por cima. Nunca ao contrário.',
+      'O underpainting de acrílico em tons de cinza (grisaille) é um método clássico adaptado.',
+      'Perfeito para 1 hora: 25 min de acrílico + 35 min de óleo.'
+    ]
+  },
+  {
+    id: 30, cat: 'oleo', name: 'Blending Suave',
+    desc: 'Transições de cor completamente suaves e sem bordos visíveis — característica icónica do óleo.',
+    difficulty: 3,
+    materials: ['Tinta a óleo', 'Tela', 'Pincel de cerdas macio (fan brush ou língua de gato)', 'Aguarrás'],
+    steps: [
+      'Aplica duas cores adjacentes com espaço de contacto de 1–2 cm entre elas.',
+      'Com um pincel limpo e seco, passa levemente na zona de contacto com movimentos de vaivém.',
+      'Não carregues — o pincel deve deslizar, não raspar.',
+      'Para blending mais suave, usa um pincel fan brush (em leque) com toque muito leve.',
+      'Quanto mais tinta na tela, mais fácil o blending — tinta escassa resiste à fusão.',
+      'Se a mistura ficar suja, limpa o pincel e volta a passar na mesma zona.'
+    ],
+    tips: [
+      'O óleo permite blending muito mais tempo que o acrílico — tens 30–60 min antes de começar a secar.',
+      'Ideal para retratos, céus e superfícies com gradiente (mar, pele, frutos).',
+      'Pincel fan brush (em leque) barato faz diferença — vale os 3–4€ do investimento.',
+      'Se a tinta secou demasiado para blend, aplica uma gota de óleo de linho e tenta novamente.'
+    ]
+  },
+  {
+    id: 31, cat: 'oleo', name: 'Impasto a Óleo',
+    desc: 'Tinta espessa diretamente do tubo, com espátula ou pincel — relevo e expressividade máximos.',
+    difficulty: 2,
+    materials: ['Tinta a óleo espessa', 'Tela grossa ou cartão oleado', 'Espátula', 'Pincel de cerdas duras'],
+    steps: [
+      'Usa tinta a óleo direto do tubo — sem diluir. A consistência espessa é fundamental.',
+      'Aplica com espátula em movimentos decisivos: corta, arrasta, empilha.',
+      'Cria relevo nas zonas de luz — os pontos mais brilhantes têm mais textura.',
+      'As sombras podem ser mais planas e fluidas, contrastando com a espessura das luzes.',
+      'Sobrepõe cores sem misturar completamente — a vibração entre tons adjacentes enriquece.',
+      'Não tentes suavizar — a marca da espátula É a estética desta técnica.'
+    ],
+    tips: [
+      'Van Gogh usava impasto a óleo para criar movimento e energia nas suas pinturas.',
+      'Tinta a óleo espessa é cara — para praticar usa acrílico gel com pigmento antes.',
+      'As camadas espessas de óleo demoram semanas a secar completamente.',
+      'Ótimo para mar agitado, campos de flores, árvores expressivas, retratos vigorosos.'
+    ]
+  },
+  {
+    id: 32, cat: 'oleo', name: 'Glazing a Óleo',
+    desc: 'Camadas transparentes de óleo muito diluído criam profundidade e luminosidade incomparáveis.',
+    difficulty: 3,
+    materials: ['Tinta a óleo', 'Tela', 'Óleo de linho ou médium glazing', 'Pincéis macios'],
+    steps: [
+      'Começa com um underpainting em grisaille (tons de cinzento) ou em terra. Aguarda secar 24h.',
+      'Prepara o glaze: muito pouca tinta misturada com bastante médium (óleo de linho ou alkyd).',
+      'Aplica o glaze com pincel macio em movimentos suaves e uniformes sobre a zona desejada.',
+      'O underpainting brilha através do glaze, criando luminosidade de dentro para fora.',
+      'Aguarda 24h antes de aplicar o glaze seguinte.',
+      'Com 3–5 glazes de cores diferentes, obtém-se profundeza que camadas opacas não conseguem.'
+    ],
+    tips: [
+      'Esta é a técnica dos Mestres Flamengos — Vermeer, Rembrandt.',
+      'Para o desafio de 1 mês: um glaze por dia no mesmo quadro é uma abordagem válida.',
+      'Médium alquídico (Liquin) acelera a secagem de 24h para 6–8h.',
+      'Glazes de amarelo sobre vermelho base dão laranjas muito mais ricas que mistura direta.'
+    ]
+  },
+  {
+    id: 33, cat: 'oleo', name: 'Color Blocking Rápido',
+    desc: 'Estabelecer toda a composição em manchas de cor simples e diretas, sem detalhes.',
+    difficulty: 1,
+    materials: ['Tinta a óleo', 'Tela ou papel oleado', 'Pincéis médios e grandes', 'Aguarrás'],
+    steps: [
+      'Esboça a composição rapidamente a carvão ou com tinta muito diluída.',
+      'Identifica 4–6 grandes zonas de cor na referência — simplifica ao máximo.',
+      'Preenche cada zona com a sua cor base, com tinta diluída em aguarrás (fase magra).',
+      'Não mistures muito — blocos de cor simples e limpos.',
+      'Avalia a composição e os valores antes de continuar para os detalhes.',
+      'Numa sessão de 1h, podes ficar pelo color blocking — é uma pintura completa per si.'
+    ],
+    tips: [
+      'Esta abordagem revela rapidamente se a composição funciona antes de investir tempo em detalhes.',
+      'Squint (semicerra os olhos) para ver apenas manchas de cor — é o que deves reproduzir primeiro.',
+      'Color blocking em óleo diluído seca razoavelmente rápido — podes detalhar na mesma sessão.',
+      'Ótimo para paisagens, naturezas mortas e composições com formas simples.'
+    ]
   }
 ];
 
@@ -1008,6 +1134,26 @@ const materials = [
     id: 'acetato', icon: '📦', name: 'Acetato / Plástico liso',
     desc: 'Tampa de caixa ou folha plástica — grátis/~1€',
     techIds: [20,21]
+  },
+  {
+    id: 'tinta-oleo', icon: '🟫', name: 'Tinta a Óleo',
+    desc: 'Marca básica (Reeves, Maries) — ~8–15€ kit inicial',
+    techIds: [28,29,30,31,32,33]
+  },
+  {
+    id: 'aguarras', icon: '🫙', name: 'Aguarrás / White Spirit',
+    desc: 'Diluente e limpeza de pincéis — ~3–5€',
+    techIds: [28,29,30,31,32,33]
+  },
+  {
+    id: 'oleo-linho', icon: '💛', name: 'Óleo de Linho / Médium',
+    desc: 'Para glazing e aumentar transparência — ~4–6€',
+    techIds: [29,30,32]
+  },
+  {
+    id: 'tela', icon: '🖼️', name: 'Tela ou Papel Oleado',
+    desc: 'Tela A4/A5 ou papel especial para óleo — ~2–8€',
+    techIds: [28,29,30,31,32,33]
   }
 ];
 
@@ -1087,7 +1233,7 @@ function filterTech(cat, btn) {
 }
 
 function catLabel(cat) {
-  const map = { aguarela: 'Aguarela', acrilico: 'Acrílico', gouache: 'Gouache', outros: 'Outros meios', abordagem: 'Abordagem' };
+  const map = { aguarela: 'Aguarela', acrilico: 'Acrílico', gouache: 'Gouache', outros: 'Outros meios', abordagem: 'Abordagem', oleo: 'Óleo' };
   return map[cat] || cat;
 }
 
