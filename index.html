@@ -1,164 +1,1239 @@
-
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>30 Dias de Pintura</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-.wrap { padding: 1rem 0 2rem; font-family: var(--font-sans); }
-.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.5rem; }
-.tab { padding: 7px 16px; font-size: 13px; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); background: transparent; cursor: pointer; color: var(--color-text-secondary); transition: all 0.15s; }
-.tab:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
-.tab.active { background: var(--color-background-secondary); color: var(--color-text-primary); border-color: var(--color-border-primary); font-weight: 500; }
-.section { margin-bottom: 1.5rem; }
-.section-title { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-secondary); margin-bottom: 8px; padding-bottom: 6px; border-bottom: 0.5px solid var(--color-border-tertiary); }
-.items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px; }
-.item { display: flex; align-items: flex-start; gap: 8px; padding: 8px 10px; background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); font-size: 13px; color: var(--color-text-primary); line-height: 1.45; }
-.item .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
-.item .sub { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
-.badge { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 10px; margin-left: 6px; vertical-align: middle; font-weight: 500; }
-.tip { font-size: 12px; color: var(--color-text-secondary); background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; margin-top: 1rem; border-left: 2px solid var(--color-border-secondary); }
-</style>
-<div class="wrap">
-  <div class="tabs">
-    <button class="tab active" onclick="show('tecnicas',this)">Técnicas</button>
-    <button class="tab" onclick="show('material',this)">Material</button>
-    <button class="tab" onclick="show('ideias',this)">Ideias para pintar</button>
-  </div>
-  <div id="content"></div>
-</div>
-<script>
-const pages = {
-tecnicas: {
-  sections: [
-    { title: "Aguarela", color: "#378ADD", items: [
-      { name: "Húmido a húmido", sub: "Papel molhado → cores fundem-se" },
-      { name: "Húmido a seco", sub: "Papel seco → bordos nítidos" },
-      { name: "Lavagem plana", sub: "Fundo de cor uniforme" },
-      { name: "Lavagem graduada", sub: "Cor que desvanece" },
-      { name: "Glazing", sub: "Camadas transparentes sobrepostas" },
-      { name: "Granulação com sal", sub: "Sal grosso na tinta húmida" },
-      { name: "Reservas com cera", sub: "Vela branca antes de pintar" },
-      { name: "Lifting", sub: "Remover tinta húmida com papel" },
-      { name: "Splatter", sub: "Respingar tinta com pincel" },
-    ]},
-    { title: "Acrílico", color: "#7F77DD", items: [
-      { name: "Camadas opacas", sub: "Cobertura total, estilo óleo" },
-      { name: "Acrílico diluído", sub: "Imitação de aguarela" },
-      { name: "Impasto", sub: "Tinta espessa, textura em relevo" },
-      { name: "Dry brush", sub: "Pincel quase seco, textura áspera" },
-      { name: "Sponging", sub: "Esponja em vez de pincel" },
-      { name: "Palette knife", sub: "Espátula em vez de pincel" },
-      { name: "Glazing acrílico", sub: "Verniz diluído sobre camada seca" },
-      { name: "Scratching", sub: "Riscar tinta húmida com palito" },
-    ]},
-    { title: "Gouache", color: "#1D9E75", items: [
-      { name: "Flat colour", sub: "Cor opaca e plana, estilo design" },
-      { name: "Gouache sobre escuro", sub: "Branco e cores claras sobre fundo escuro" },
-      { name: "Gouache + aguarela", sub: "Fundo fluido + detalhes opacos" },
-    ]},
-    { title: "Outros meios", color: "#D85A30", items: [
-      { name: "Tinta da China", sub: "Linhas e lavagens monocromáticas" },
-      { name: "Técnica mista", sub: "Colagem, lápis, pastel + tinta" },
-      { name: "Marmorizado", sub: "Tinta flutuante sobre água" },
-      { name: "Mono-print", sub: "Imprimir de uma superfície lisa" },
-    ]},
-    { title: "Abordagens / formas de pintar", color: "#BA7517", items: [
-      { name: "Paleta limitada (3 cores)", sub: "Treino de mistura de cor" },
-      { name: "Monocromático", sub: "1 cor + água/branco" },
-      { name: "Esboço rápido pintado", sub: "10 min esboço + 50 min cor" },
-      { name: "Pintura às cegas", sub: "Não olhar para o papel" },
-      { name: "Do geral ao detalhe", sub: "Fundo → meio → frente" },
-      { name: "De memória", sub: "Sem referência visual" },
-      { name: "Negativo painting", sub: "Pintar o fundo, não o objeto" },
-    ]}
-  ],
-  tip: "Não precisas de ter todos os meios — aguarela e gouache com os mesmos pincéis já chegam para experimentar a maioria destas técnicas."
-},
-material: {
-  sections: [
-    { title: "Tintas — escolhe 1 ou 2 tipos para começar", color: "#7F77DD", items: [
-      { name: "Aguarela em pastilha", sub: "Ex: Koi Sakura 12 cores · ~6–10€", badge: "essencial" },
-      { name: "Gouache básico", sub: "Ex: Maries ou Reeves 12 cores · ~7–12€", badge: "essencial" },
-      { name: "Acrílico básico", sub: "Pébéo ou Lidl/Action · ~5–10€", badge: "opcional" },
-      { name: "Tinta da China preta", sub: "1 frasco · ~3–5€", badge: "opcional" },
-    ]},
-    { title: "Pincéis — o mínimo que precisas", color: "#1D9E75", items: [
-      { name: "Pincel redondo nº 6–8", sub: "Para fundos e áreas médias" },
-      { name: "Pincel redondo nº 2–3", sub: "Para detalhes" },
-      { name: "Pincel plano largo", sub: "Para lavagens de fundo" },
-      { name: "Pincel velho/esponja", sub: "Para texturas e splatter" },
-    ]},
-    { title: "Papel — não poupes aqui", color: "#D85A30", items: [
-      { name: "Papel aguarela 200g/m² A4", sub: "Bloco 20 folhas · ~5–8€ · Canson, Fabriano budget" , badge: "essencial" },
-      { name: "Papel liso/cartolina", sub: "Para gouache e acrílico · ~1–2€" },
-      { name: "Caderno de esboços A5", sub: "Para estudos rápidos · ~3–5€" },
-    ]},
-    { title: "Extras úteis e baratos", color: "#BA7517", items: [
-      { name: "Sal grosso de cozinha", sub: "Efeito granulação na aguarela · grátis" },
-      { name: "Vela branca", sub: "Reservas de cera · grátis/já tens" },
-      { name: "Palitos de madeira", sub: "Scratching e detalhes · grátis" },
-      { name: "Prato velho / tampa plástica", sub: "Serve de paleta · grátis" },
-      { name: "Fita crepe ou washi tape", sub: "Prender papel e criar bordos · ~1–2€" },
-      { name: "Esponja de cozinha velha", sub: "Texturas · grátis" },
-      { name: "Conta-gotas ou seringa", sub: "Dosear água · grátis" },
-      { name: "Copo e papel absorvente", sub: "Limpar pincéis · grátis" },
-    ]},
-  ],
-  tip: "Orçamento total estimado para começar: 20–35€. Compra primeiro aguarela em pastilha + papel 200g + 3 pincéis. O resto vai comprando aos poucos."
-},
-ideias: {
-  sections: [
-    { title: "Objetos do quotidiano", color: "#7F77DD", items: [
-      {name:"Uma chávena de café"},{name:"Fruta sobre a mesa"},{name:"Um par de sapatos"},{name:"Planta de interior"},
-      {name:"Uma vela acesa"},{name:"Livros empilhados"},{name:"Óculos de sol"},{name:"Um copo de água com luz"},
-      {name:"Especiarias em frascos"},{name:"Queijo e fruta — natureza morta simples"},
-    ]},
-    { title: "Natureza", color: "#1D9E75", items: [
-      {name:"Uma flor isolada (dente-de-leão, rosa, girassol)"},{name:"Folha de outono detalhada"},
-      {name:"Pedras e seixos"},{name:"Casca de árvore texturada"},{name:"Musgo sobre rocha"},
-      {name:"Cogumelo"},{name:"Fruto cortado ao meio (kiwi, figo, laranja)"},{name:"Ramo com flores silvestres"},
-      {name:"Poça de água com reflexo"},{name:"Concha ou búzio"},
-    ]},
-    { title: "Céu e luz", color: "#378ADD", items: [
-      {name:"Pôr do sol com nuvens laranja"},{name:"Céu nublado dramático"},{name:"Noite estrelada simples"},
-      {name:"Céu ao amanhecer"},{name:"Chuva numa janela"},{name:"Arco-íris esquemático"},
-      {name:"Neblina matinal sobre campo"},{name:"Nuvens com luz por trás"},
-    ]},
-    { title: "Paisagem e arquitetura", color: "#D85A30", items: [
-      {name:"Horizonte simples: terra + céu"},{name:"Árvore isolada no inverno (sem folhas)"},
-      {name:"Rio ou riacho"},{name:"Janela com luz de dentro"},{name:"Uma porta colorida"},
-      {name:"Calçada portuguesa (padrão)"},{name:"Farol"},{name:"Ponte sobre água"},
-      {name:"Rua de aldeia"},{name:"Telhados vistos de cima"},
-    ]},
-    { title: "Abstrato e experimental", color: "#BA7517", items: [
-      {name:"Pintar uma emoção (raiva, calma, alegria)"},{name:"Uma música que estás a ouvir em formas"},
-      {name:"Formas geométricas simples com sombra"},{name:"Gradiente de cores sem forma"},
-      {name:"Padrão repetitivo (círculos, triângulos)"},{name:"Textura pura (sem tema)"},
-      {name:"Cores frias vs cores quentes — divisão da tela"},{name:"Rabisco pintado (sem plano)"},
-    ]},
-    { title: "Inspiração pessoal / memória", color: "#639922", items: [
-      {name:"O sítio onde passaste as férias"},{name:"A tua rua ou bairro"},
-      {name:"Uma refeição preferida"},{name:"Um objeto com valor sentimental"},
-      {name:"O teu cantinho favorito em casa"},{name:"Uma vista que te marcou"},
-    ]},
-  ],
-  tip: "Quando não souberes o que pintar, olha à volta — a chávena na tua mesa ou a janela mais próxima já são motivos suficientes."
+:root {
+  --ink: #1a1712;
+  --ink2: #4a4640;
+  --ink3: #8a8480;
+  --paper: #f7f4ee;
+  --paper2: #eee9df;
+  --paper3: #e4ddd0;
+  --accent: #c4622d;
+  --accent2: #d4874e;
+  --blue: #3a6b8a;
+  --green: #4a7c59;
+  --purple: #6b5a8a;
+  --teal: #2a7a6e;
+  --gold: #b8922a;
+  --radius: 10px;
+  --shadow: 0 2px 12px rgba(26,23,18,0.10);
+  --shadow-lg: 0 8px 32px rgba(26,23,18,0.18);
 }
-};
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
+}
 
-function show(page, el) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  if(el) el.classList.add('active');
-  const p = pages[page];
-  let html = '';
-  p.sections.forEach(s => {
-    html += `<div class="section"><div class="section-title">${s.title}</div><div class="items-grid">`;
-    s.items.forEach(item => {
-      const badge = item.badge ? `<span class="badge" style="background:${s.color}22;color:${s.color}">${item.badge}</span>` : '';
-      const sub = item.sub ? `<div class="sub">${item.sub}</div>` : '';
-      html += `<div class="item"><div class="dot" style="background:${s.color};margin-top:${item.sub?'5':'7'}px"></div><div><div>${item.name}${badge}</div>${sub}</div></div>`;
-    });
-    html += `</div></div>`;
-  });
-  html += `<div class="tip">${p.tip}</div>`;
-  document.getElementById('content').innerHTML = html;
+/* NAV */
+nav {
+  background: var(--ink);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.25);
 }
-show('tecnicas');
+.nav-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  color: var(--paper);
+  padding: 14px 0;
+  margin-right: 2rem;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+.nav-brand span { color: var(--accent2); font-style: italic; }
+.nav-tabs { display: flex; gap: 0; flex: 1; }
+.nav-tab {
+  background: none;
+  border: none;
+  color: var(--ink3);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 18px 20px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+.nav-tab:hover { color: var(--paper2); }
+.nav-tab.active { color: var(--accent2); border-bottom-color: var(--accent2); }
+
+/* PAGES */
+.page { display: none; padding: 2rem; max-width: 1100px; margin: 0 auto; }
+.page.active { display: block; }
+
+/* PAGE HEADER */
+.page-header { margin-bottom: 2rem; border-bottom: 0.5px solid var(--paper3); padding-bottom: 1.5rem; }
+.page-header h1 { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 400; }
+.page-header p { color: var(--ink3); font-size: 14px; margin-top: 4px; }
+
+/* TECHNIQUE FILTERS */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 1.5rem;
+}
+.filter-btn {
+  padding: 5px 14px;
+  font-size: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  border-radius: 20px;
+  border: 1px solid var(--paper3);
+  background: transparent;
+  color: var(--ink3);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.filter-btn:hover { border-color: var(--ink3); color: var(--ink); }
+.filter-btn.active {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+/* TECHNIQUE GRID */
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+.tech-card {
+  background: var(--paper2);
+  border: 1px solid var(--paper3);
+  border-radius: var(--radius);
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.tech-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  border-radius: 3px 0 0 3px;
+}
+.tech-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); border-color: var(--paper3); }
+.tech-card .cat-badge {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  opacity: 0.7;
+}
+.tech-card h3 { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+.tech-card p { font-size: 12px; color: var(--ink3); line-height: 1.4; }
+.tech-card .arrow { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); opacity: 0.3; font-size: 16px; transition: 0.2s; }
+.tech-card:hover .arrow { opacity: 0.8; transform: translateY(-50%) translateX(3px); }
+
+/* MODAL */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(26,23,18,0.55);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  backdrop-filter: blur(2px);
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--paper);
+  border-radius: 14px;
+  max-width: 620px;
+  width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  animation: modalIn 0.2s ease;
+}
+@keyframes modalIn { from { opacity:0; transform: scale(0.96) translateY(8px); } to { opacity:1; transform: none; } }
+.modal-header {
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid var(--paper3);
+  position: relative;
+}
+.modal-cat { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+.modal-header h2 { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 400; }
+.modal-header p { color: var(--ink3); font-size: 13px; margin-top: 4px; }
+.modal-close {
+  position: absolute; right: 16px; top: 16px;
+  background: var(--paper2); border: none; border-radius: 50%;
+  width: 32px; height: 32px; cursor: pointer; font-size: 16px;
+  display: flex; align-items: center; justify-content: center; color: var(--ink2);
+  transition: background 0.15s;
+}
+.modal-close:hover { background: var(--paper3); }
+.modal-body { padding: 20px 24px 24px; }
+.modal-section { margin-bottom: 20px; }
+.modal-section h4 { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink3); margin-bottom: 10px; }
+.steps { display: flex; flex-direction: column; gap: 8px; }
+.step { display: flex; gap: 12px; align-items: flex-start; }
+.step-num {
+  width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 500; background: var(--ink); color: var(--paper);
+}
+.step-text { font-size: 13px; color: var(--ink2); padding-top: 3px; line-height: 1.5; }
+.materials-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.mat-pill {
+  font-size: 12px; padding: 4px 12px; border-radius: 20px;
+  background: var(--paper2); border: 1px solid var(--paper3); color: var(--ink2);
+}
+.tips-list { display: flex; flex-direction: column; gap: 6px; }
+.tip-item { font-size: 13px; color: var(--ink2); padding-left: 14px; position: relative; line-height: 1.5; }
+.tip-item::before { content: '→'; position: absolute; left: 0; color: var(--accent); }
+.difficulty-row { display: flex; gap: 6px; align-items: center; font-size: 13px; color: var(--ink2); }
+.diff-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+/* MATERIAL PAGE */
+.mat-layout { display: grid; grid-template-columns: 260px 1fr; gap: 2rem; align-items: start; }
+@media (max-width: 680px) { .mat-layout { grid-template-columns: 1fr; } }
+.mat-sidebar h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink3); margin-bottom: 10px; }
+.mat-list { display: flex; flex-direction: column; gap: 4px; }
+.mat-item {
+  padding: 10px 14px; border-radius: var(--radius);
+  border: 1px solid var(--paper3); background: var(--paper2);
+  cursor: pointer; font-size: 13px; transition: all 0.15s;
+  display: flex; align-items: center; gap: 8px;
+}
+.mat-item:hover { border-color: var(--ink3); }
+.mat-item.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.mat-item .mat-icon { font-size: 16px; }
+.mat-results h3 { font-size: 14px; font-weight: 500; margin-bottom: 1rem; color: var(--ink2); }
+.mat-tech-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.mat-tech-card {
+  background: var(--paper2); border: 1px solid var(--paper3);
+  border-radius: var(--radius); padding: 14px; cursor: pointer; transition: all 0.2s;
+}
+.mat-tech-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.mat-tech-card h4 { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+.mat-tech-card p { font-size: 11px; color: var(--ink3); }
+.empty-state { text-align: center; padding: 3rem; color: var(--ink3); font-size: 14px; }
+.empty-state .big { font-size: 48px; margin-bottom: 8px; }
+
+/* IDEAS PAGE */
+.ideas-intro {
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.ideas-intro .num { font-family: 'Playfair Display', serif; font-size: 48px; color: var(--accent2); line-height: 1; flex-shrink: 0; }
+.ideas-intro h2 { font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 4px; }
+.ideas-intro p { font-size: 13px; color: var(--paper3); }
+.ideas-section { margin-bottom: 2rem; }
+.ideas-section-title {
+  font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 400;
+  margin-bottom: 1rem; padding-bottom: 8px;
+  border-bottom: 1px solid var(--paper3);
+  display: flex; align-items: center; gap: 8px;
+}
+.ideas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+.idea-card {
+  background: var(--paper2); border: 1px solid var(--paper3);
+  border-radius: var(--radius); padding: 12px 14px;
+  font-size: 13px; cursor: pointer; transition: all 0.15s;
+  position: relative;
+}
+.idea-card:hover { background: var(--paper3); transform: translateY(-1px); }
+.idea-card.done { opacity: 0.45; text-decoration: line-through; }
+.idea-card .done-mark {
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+  font-size: 14px; color: var(--green);
+}
+.ideas-counter {
+  text-align: right; font-size: 13px; color: var(--ink3); margin-bottom: 1rem;
+}
+.ideas-counter span { color: var(--accent); font-weight: 500; }
+
+/* COLOR ACCENTS */
+.c-aguarela { color: var(--blue); }
+.c-acrilico { color: var(--purple); }
+.c-gouache { color: var(--teal); }
+.c-outros { color: var(--accent); }
+.c-abordagem { color: var(--gold); }
+.bg-aguarela::before { background: var(--blue); }
+.bg-acrilico::before { background: var(--purple); }
+.bg-gouache::before { background: var(--teal); }
+.bg-outros::before { background: var(--accent); }
+.bg-abordagem::before { background: var(--gold); }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--paper2); }
+::-webkit-scrollbar-thumb { background: var(--paper3); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">30 Dias de <span>Pintura</span></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('tecnicas', this)">Técnicas</button>
+    <button class="nav-tab" onclick="showPage('material', this)">Material</button>
+    <button class="nav-tab" onclick="showPage('ideias', this)">Ideias</button>
+  </div>
+</nav>
+
+<!-- PÁGINA TÉCNICAS -->
+<div class="page active" id="page-tecnicas">
+  <div class="page-header">
+    <h1>Técnicas de Pintura</h1>
+    <p>Clica numa técnica para ver como fazer passo a passo. Filtra por categoria.</p>
+  </div>
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterTech('todas', this)">Todas</button>
+    <button class="filter-btn" onclick="filterTech('aguarela', this)">Aguarela</button>
+    <button class="filter-btn" onclick="filterTech('acrilico', this)">Acrílico</button>
+    <button class="filter-btn" onclick="filterTech('gouache', this)">Gouache</button>
+    <button class="filter-btn" onclick="filterTech('outros', this)">Outros meios</button>
+    <button class="filter-btn" onclick="filterTech('abordagem', this)">Abordagens</button>
+  </div>
+  <div class="tech-grid" id="tech-grid"></div>
+</div>
+
+<!-- PÁGINA MATERIAL -->
+<div class="page" id="page-material">
+  <div class="page-header">
+    <h1>Material</h1>
+    <p>Escolhe um material para ver as técnicas que podes fazer com ele, ou escolhe uma técnica para ver o que precisas.</p>
+  </div>
+  <div class="mat-layout">
+    <div>
+      <div class="mat-sidebar">
+        <h3>Escolhe um material</h3>
+        <div class="mat-list" id="mat-list"></div>
+      </div>
+    </div>
+    <div>
+      <div id="mat-results">
+        <div class="empty-state"><div class="big">🎨</div>Seleciona um material à esquerda</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PÁGINA IDEIAS -->
+<div class="page" id="page-ideias">
+  <div class="page-header">
+    <h1>Ideias para Pintar</h1>
+    <p>Clica numa ideia para a marcar como feita. Acompanha o teu progresso.</p>
+  </div>
+  <div class="ideas-counter">Pinturas concluídas: <span id="done-count">0</span> de <span id="total-count">0</span></div>
+  <div id="ideas-content"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-cat" id="m-cat"></div>
+      <h2 id="m-title"></h2>
+      <p id="m-desc"></p>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <h4>Dificuldade</h4>
+        <div class="difficulty-row" id="m-diff"></div>
+      </div>
+      <div class="modal-section">
+        <h4>Material necessário</h4>
+        <div class="materials-list" id="m-mats"></div>
+      </div>
+      <div class="modal-section">
+        <h4>Passo a passo</h4>
+        <div class="steps" id="m-steps"></div>
+      </div>
+      <div class="modal-section">
+        <h4>Dicas</h4>
+        <div class="tips-list" id="m-tips"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const techniques = [
+  // AGUARELA
+  {
+    id: 1, cat: 'aguarela', name: 'Húmido a Húmido',
+    desc: 'Pintar sobre papel previamente molhado. As cores fundem-se de forma orgânica.',
+    difficulty: 2,
+    materials: ['Aguarela', 'Papel 200g/m²', 'Pincel redondo', 'Água', 'Esponja ou spray'],
+    steps: [
+      'Molha o papel com água limpa usando uma esponja grande ou spray. O papel deve estar brilhante mas sem poças.',
+      'Inclina levemente o teu suporte (5–10 graus) para que a tinta flua naturalmente.',
+      'Aplica as primeiras cores com um pincel carregado de tinta muito diluída. Deixa fluir.',
+      'Acrescenta cor mais escura enquanto o papel ainda está húmido. Observa a fusão acontecer.',
+      'Não toques nas zonas que já estão a fundir — deixa a água trabalhar.',
+      'Aguarda secar completamente antes de adicionar detalhes finais com técnica húmido a seco.'
+    ],
+    tips: [
+      'Testa sempre o papel — se o dedo não deslizar suavemente, está demasiado seco.',
+      'Trabalha rápido: tens cerca de 3–5 minutos antes do papel secar.',
+      'Ideal para fundos, céus, reflexos em água e campos de flores.',
+      'Se o papel ondular, fixa-o na borda com fita crepe antes de molhar.'
+    ]
+  },
+  {
+    id: 2, cat: 'aguarela', name: 'Húmido a Seco',
+    desc: 'Pintar com tinta húmida sobre papel seco. Cria bordos nítidos e detalhes precisos.',
+    difficulty: 1,
+    materials: ['Aguarela', 'Papel 200g/m²', 'Pincel redondo fino', 'Água'],
+    steps: [
+      'Certifica-te que o papel está completamente seco (temperatura ambiente, sem humidade).',
+      'Prepara a tua tinta com pouca água para obter cor concentrada.',
+      'Aplica com movimentos decididos — o bordo seco cria automaticamente linhas firmes.',
+      'Preenche áreas de cor uniforme com pinceladas paralelas sem sobrepor demasiado.',
+      'Para detalhes, usa o pincel quase seco e a ponta fina.',
+      'Aguarda que cada camada seque antes de adicionar a seguinte.'
+    ],
+    tips: [
+      'É a técnica mais controlada — ótima para pintar edifícios, folhas e objetos com forma definida.',
+      'Para bordos perfeitamente retos, usa fita crepe como guia.',
+      'A tinta seca sempre mais clara — aplica mais intensidade do que pareces precisar.',
+      'Combina com húmido a húmido: fundo suave + detalhes nítidos por cima.'
+    ]
+  },
+  {
+    id: 3, cat: 'aguarela', name: 'Lavagem Graduada',
+    desc: 'Transição suave de uma cor escura para clara (ou entre duas cores) numa área uniforme.',
+    difficulty: 2,
+    materials: ['Aguarela', 'Papel 200g/m²', 'Pincel plano largo', 'Água'],
+    steps: [
+      'Inclina o papel a 10–15 graus. Prepara um pincel grande com tinta concentrada.',
+      'Aplica a primeira pincelada na parte de cima com tinta intensa.',
+      'Acrescenta água ao pincel (sem adicionar mais tinta) e faz a segunda pincelada, tocando a anterior.',
+      'A cada pincelada, dilui mais. O excesso de tinta desce e funde na pincelada de baixo.',
+      'No final, usa um pincel quase seco para apanhar qualquer excesso que tenha acumulado em baixo.',
+      'Não toques até secar completamente.'
+    ],
+    tips: [
+      'Ideal para céus, fundos e superfícies de água.',
+      'Para gradiente entre duas cores (ex: amarelo → laranja), começa com uma e introduz a segunda a partir do meio.',
+      'Papel inclinado é essencial — sem inclinação a tinta acumula no bordo inferior.',
+      'Quanto mais agua, mais suave a transição.'
+    ]
+  },
+  {
+    id: 4, cat: 'aguarela', name: 'Glazing',
+    desc: 'Camadas finas e transparentes sobrepostas para criar profundidade e mistura óptica de cor.',
+    difficulty: 3,
+    materials: ['Aguarela', 'Papel 200g/m²', 'Pincéis variados', 'Água'],
+    steps: [
+      'Começa com uma camada muito diluída e leve. Deixa secar completamente.',
+      'Aplica uma segunda camada de cor diferente (ou a mesma mais concentrada) por cima.',
+      'A mistura acontece visualmente, não na paleta — as cores sobrepõem-se como filtros.',
+      'Repete com 3–5 camadas, sempre aguardando a secagem completa entre cada uma.',
+      'As zonas com mais camadas ficam mais escuras e ricas.',
+      'Usa para sombras: amarelo base + glazing roxo por cima cria sombras ricas e naturais.'
+    ],
+    tips: [
+      'Nunca pintas em cima de tinta húmida — a camada de baixo vai levantar.',
+      'Usa pigmentos transparentes (ex: amarelo limão, azul prussiano, alizarina) para melhores resultados.',
+      'Com 3 camadas azul + amarelo + vermelho em sobreposição parcial obténs todos os tons secundários.',
+      'É a técnica dos mestres da aguarela clássica.'
+    ]
+  },
+  {
+    id: 5, cat: 'aguarela', name: 'Granulação com Sal',
+    desc: 'Sal lançado sobre tinta húmida absorve a água e cria texturas orgânicas únicas.',
+    difficulty: 1,
+    materials: ['Aguarela', 'Papel 200g/m²', 'Sal grosso ou fino', 'Pincel'],
+    steps: [
+      'Pinta uma área com tinta muito húmida e pigmento concentrado — funciona melhor com camadas ricas.',
+      'Enquanto a tinta ainda está brilhante (não semisseca), lança sal distribuído.',
+      'Cada grão de sal absorve a água em redor criando uma marca orgânica.',
+      'Aguarda secar completamente sem mexer (10–15 minutos).',
+      'Quando totalmente seco, sacude ou esfrega suavemente o sal.',
+      'A textura fica permanente no papel.'
+    ],
+    tips: [
+      'Sal grosso cria manchas maiores, sal fino cria uma textura mais fina e densa.',
+      'Funciona melhor com tintas que granulam (azul ultramarino, verde-terra).',
+      'Ótimo para representar estrelas, neve, superfícies de rocha, texturas de pedra.',
+      'O momento certo é crucial: demasiado cedo a tinta está líquida demais, demasiado tarde já não reage.'
+    ]
+  },
+  {
+    id: 6, cat: 'aguarela', name: 'Masking com Cera',
+    desc: 'Vela branca aplicada sobre o papel protege essas zonas da tinta, criando reservas.',
+    difficulty: 1,
+    materials: ['Aguarela', 'Papel 200g/m²', 'Vela branca', 'Pincel'],
+    steps: [
+      'Com a vela branca, desenha ou frota as zonas que queres preservar em branco/claro.',
+      'A pressão determina a intensidade da reserva — mais pressão, mais cera, mais resistência.',
+      'Pinta normalmente por cima com aguarela. A tinta vai escorrer das zonas com cera.',
+      'Observa como aparecem os brancos e claros de forma orgânica e irregular.',
+      'A cera não se remove — é um efeito permanente, por isso planeia bem antes de aplicar.',
+      'Combina camadas: cera → tinta clara → cera → tinta escura para efeitos em profundidade.'
+    ],
+    tips: [
+      'Ideal para capim, espuma do mar, estrelas, ramos de árvore, reflexos de luz.',
+      'Testa primeiro num papel de rascunho — às vezes não se vê a cera até pintar por cima.',
+      'Funciona melhor com papel com textura (não liso).',
+      'Alternativa: masking fluid (látex líquido) que se remove depois de seco.'
+    ]
+  },
+  {
+    id: 7, cat: 'aguarela', name: 'Lifting',
+    desc: 'Remover tinta húmida com papel absorvente, pincel seco ou esponja para criar efeitos de luz.',
+    difficulty: 2,
+    materials: ['Aguarela', 'Papel 200g/m²', 'Papel de cozinha', 'Pincel seco', 'Esponja'],
+    steps: [
+      'Aplica a tinta normalmente sobre papel seco ou húmido.',
+      'Enquanto ainda húmida, dobra papel de cozinha e pressiona suavemente sobre a zona desejada.',
+      'Levanta na direção certa para criar a forma pretendida (ex: nuvem, reflexo, rosto).',
+      'Para lifting mais controlado, usa um pincel limpo e ligeiramente húmido — frota com suavidade.',
+      'Para nuvens: aplica fundo azul, depois amassa papel de cozinha e pressiona em movimentos circulares.',
+      'Podes repetir na mesma zona várias vezes enquanto a tinta estiver húmida.'
+    ],
+    tips: [
+      'Quanto mais absorvente o papel de cozinha, mais tinta levanta.',
+      'Pincel húmido e limpo remove mais suavemente — ideal para gradientes e transições.',
+      'Papel de aguarela de qualidade aguenta mais lifting sem danificar as fibras.',
+      'Funciona melhor com tintas que não são "staining" (manchantes), como os amarelos e azuis claros.'
+    ]
+  },
+  {
+    id: 8, cat: 'aguarela', name: 'Splatter',
+    desc: 'Respingar tinta com pincel para criar texturas, estrelas, chuva, ou efeito orgânico.',
+    difficulty: 1,
+    materials: ['Aguarela', 'Papel', 'Pincel velho de cerdas firmes', 'Água'],
+    steps: [
+      'Carrega um pincel velho com tinta bem diluída.',
+      'Segura o pincel na horizontal sobre o papel e passa o dedo pelas cerdas em direção a ti.',
+      'A tinta respinga em frente — controla a distância para regular o tamanho das gotas.',
+      'Para gotas maiores, usa mais tinta e pincel mais afastado.',
+      'Para estrelas: usa fundo escuro + splatter com branco (gouache).',
+      'Protege as zonas que não queres respingar com papel ou fita.'
+    ],
+    tips: [
+      'Faz sempre testes num papel de rascunho antes de aplicar na obra.',
+      'Quanto mais diluída a tinta, maiores e mais redondas as gotas.',
+      'Um palito passado pela carga do pincel dá salpicos mais finos e controlados.',
+      'Combina spatter de várias cores para efeitos galáxia ou pintura expressionista.'
+    ]
+  },
+
+  // ACRÍLICO
+  {
+    id: 9, cat: 'acrilico', name: 'Camadas Opacas',
+    desc: 'Aplicação de tinta acrílica em camadas cobrindo totalmente a camada anterior.',
+    difficulty: 1,
+    materials: ['Tinta acrílica', 'Tela ou papel grosso', 'Pincéis', 'Paleta'],
+    steps: [
+      'Começa por cobrir toda a superfície com uma cor base diluída (underpainting). Seca em 10 min.',
+      'Identifica as grandes áreas de cor e preenche-as com acrílico direto do tubo (pouca água).',
+      'Trabalha do fundo para a frente — pinta primeiro os elementos mais distantes.',
+      'Adiciona camadas mais opacas sobre as anteriores, refinando as formas.',
+      'Para transições suaves, mistura as cores ainda húmidas (tens 5–10 min antes de secarem).',
+      'Termina com os detalhes mais finos e os pontos de maior luz.'
+    ],
+    tips: [
+      'Acrílico seca mais escuro — testa a cor num canto antes de aplicar na área principal.',
+      'Diluir demais com água enfraquece o aglutinante. Para efeitos transparentes, usa médio acrílico.',
+      'Pode-se pintar por cima de erros — a opacidade é a tua grande vantagem.',
+      'Um secador de cabelo acelera a secagem entre camadas.'
+    ]
+  },
+  {
+    id: 10, cat: 'acrilico', name: 'Impasto',
+    desc: 'Aplicar tinta muito espessa (diretamente do tubo) criando relevo tridimensional.',
+    difficulty: 2,
+    materials: ['Tinta acrílica espessa', 'Tela', 'Espátula ou pincel de cerdas duras'],
+    steps: [
+      'Usa tinta acrílica espessa (body acrílico ou gel médium misturado com tinta normal).',
+      'Aplica com espátula fazendo movimentos decisivos — corta, espalha, arrasta.',
+      'Com pincel de cerdas duras podes criar texturas com a marca das cerdas.',
+      'Sobrepõe cores sem misturar — os tons coexistem em paralelo e criam vibração visual.',
+      'Constrói relevo progressivamente em zonas que queres destacar (pontos de luz).',
+      'Deixa secar 30–60 min entre camadas espessas para não misturar involuntariamente.'
+    ],
+    tips: [
+      'Imita a técnica de Van Gogh — pinceladas espessas e direcionais expressam movimento.',
+      'Espátula de plástico (barata) funciona tão bem como a metálica.',
+      'Para economizar tinta cara, mistura com gel texture ou pasta de modelagem.',
+      'Ótimo para retratar o mar, campos de cereais, superfícies rochosas.'
+    ]
+  },
+  {
+    id: 11, cat: 'acrilico', name: 'Dry Brush',
+    desc: 'Pincel quase seco passado sobre textura rugosa cria efeito de brilho, pele ou madeira.',
+    difficulty: 1,
+    materials: ['Tinta acrílica', 'Tela ou papel rugoso', 'Pincel de cerdas duras'],
+    steps: [
+      'Coloca muito pouca tinta no pincel — menos do que parece ser suficiente.',
+      'Limpa o excesso de tinta num papel de rascunho até quase não sair cor.',
+      'Passa o pincel com rapidez e leveza sobre a superfície rugosa.',
+      'A tinta adere apenas às saliências do papel/tela, criando textura visual.',
+      'Sobrepõe dry brush em várias cores para criar superfícies complexas.',
+      'Combina com camadas lisas como fundo — dry brush aplica-se por cima.'
+    ],
+    tips: [
+      'Funciona melhor com suporte texturado. Em papel liso o efeito é menor.',
+      'Ideal para capim seco, casca de árvore, pelo de animal, madeira, pedra.',
+      'A velocidade da pincelada importa — mais rápido = textura mais sutil.',
+      'Experimenta com diferentes ângulos do pincel para resultados variados.'
+    ]
+  },
+  {
+    id: 12, cat: 'acrilico', name: 'Sponging',
+    desc: 'Usar esponja em vez de pincel para criar texturas orgânicas de folhagem e nuvens.',
+    difficulty: 1,
+    materials: ['Tinta acrílica', 'Tela ou papel', 'Esponja de cozinha velha', 'Paleta'],
+    steps: [
+      'Coloca tinta na paleta. Molha a esponja em água e espreme bem (deve estar quase seca).',
+      'Bate a esponja na paleta para carregar de tinta de forma irregular.',
+      'Aplica em dabbing (batidas) sobre o suporte — não arrastes.',
+      'Para folhagem: usa verde claro primeiro, depois escuro por cima em zonas de sombra.',
+      'Para nuvens: usa branco + cinzento com movimentos circulares leves.',
+      'Rasga a esponja para criar bordos ainda mais irregulares.'
+    ],
+    tips: [
+      'Cada esponja cria uma textura diferente — experimenta esponja de mar, de banho, de cozinha.',
+      'Dobra a esponja para trabalhar em espaços apertados.',
+      'Perfeito para fundos de paisagem rápidos — uma esponja cobre muito espaço em pouco tempo.',
+      'Combina com pincel para os detalhes finais.'
+    ]
+  },
+  {
+    id: 13, cat: 'acrilico', name: 'Palette Knife',
+    desc: 'Espátula em vez de pincel cria formas geométricas, texturas e pinceladas ousadas.',
+    difficulty: 2,
+    materials: ['Tinta acrílica espessa', 'Tela', 'Espátula plana ou em losango'],
+    steps: [
+      'Carrega a espátula com tinta na lateral plana ou na ponta.',
+      'Arrasta pela tela com pressão uniforme — cria planos de cor limpos.',
+      'Com a ponta, risca linhas ou cria bordos nítidos entre cores.',
+      'Sobrepõe duas cores lado a lado e mistura levemente na zona de contacto.',
+      'Para textura de mar ou campo: movimentos horizontais com pressão variável.',
+      'Limpa a espátula com papel de cozinha entre aplicações de cor diferente.'
+    ],
+    tips: [
+      'Espátula de plástico de cozinha funciona perfeitamente — não precisas de comprar.',
+      'Experimenta com cartões velhos, tampas ou qualquer objeto plano.',
+      'A espátula não deixa marcas de pincel — dá um aspeto contemporâneo e expressivo.',
+      'Ótimo para paisagens abstratas, edifícios, reflexos de água.'
+    ]
+  },
+  {
+    id: 14, cat: 'acrilico', name: 'Scratching',
+    desc: 'Riscar a tinta ainda húmida com palito, pente ou cartão para criar linhas expressivas.',
+    difficulty: 1,
+    materials: ['Tinta acrílica', 'Tela ou papel', 'Palito', 'Pente velho', 'Cartão'],
+    steps: [
+      'Aplica uma camada generosa de tinta acrílica sobre o suporte.',
+      'Enquanto a tinta está húmida, usa o palito para riscar com pressão.',
+      'Cria linhas com movimentos fluidos e contínuos.',
+      'Com pente, cria múltiplas linhas paralelas em simultâneo — ótimo para capim e cabelo.',
+      'A pressão determina a profundidade — mais pressão expõe o fundo, menos pressão dá linhas mais subtis.',
+      'Trabalha rápido — tens 5–10 minutos antes da tinta secar.'
+    ],
+    tips: [
+      'Para capim: aplica verde, scratch para cima com movimentos curvos e subtis.',
+      'Para ondas: scratch horizontal sobre azul com movimento ondulado.',
+      'Experimenta com garfos, tampas recortadas, cartões dentados.',
+      'Tinta mais espessa dá melhores resultados — tinta muito diluída fecha as linhas riscadas.'
+    ]
+  },
+
+  // GOUACHE
+  {
+    id: 15, cat: 'gouache', name: 'Flat Colour',
+    desc: 'Aplicação de cor opaca e uniforme sem gradientes. Estilo design e ilustração.',
+    difficulty: 1,
+    materials: ['Gouache', 'Papel liso', 'Pincel plano', 'Água'],
+    steps: [
+      'Dilui o gouache com muito pouca água — deve ter consistência de creme.',
+      'Usa um pincel plano de tamanho adequado à área a preencher.',
+      'Aplica em pinceladas paralelas e uniformes, sem sobrecarregar ou subcarregar o pincel.',
+      'Para a segunda camada (se necessário), aguarda a secagem completa da primeira.',
+      'Bordos nítidos: usa o bordo lateral do pincel plano.',
+      'Para formas curvas, roda o papel em vez de contorcer o punho.'
+    ],
+    tips: [
+      'Gouache muito diluído perde opacidade — se estiveres a ver o papel, acrescenta mais tinta.',
+      'Ideal para ilustração, cartazes, design de personagens.',
+      'As cores mais escuras precisam de 2 camadas para cobertura total.',
+      'Branco de gouache sobre fundo escuro é a sua maior vantagem sobre aguarela.'
+    ]
+  },
+  {
+    id: 16, cat: 'gouache', name: 'Gouache sobre Fundo Escuro',
+    desc: 'Pintar cores claras e brancas sobre papel escuro — inverte a lógica da aguarela.',
+    difficulty: 2,
+    materials: ['Gouache', 'Papel colorido escuro ou cartolina preta', 'Pincéis'],
+    steps: [
+      'Usa papel colorido escuro (azul escuro, preto, bordeaux) ou pinta um fundo escuro com acrílico.',
+      'Esboça levemente com lápis branco ou giz.',
+      'Começa pelas cores mais escuras da composição — usarão menos cobertura.',
+      'As cores médias e claras a seguir, usando gouache mais espesso.',
+      'Branco e amarelo precisam de 2–3 camadas para ficarem totalmente opacos.',
+      'Os detalhes mais brilhantes ficam para o final — luz pura com branco denso.'
+    ],
+    tips: [
+      'Experimenta flores, constelações, interiores iluminados, animais noturnos.',
+      'O branco de gouache sobre preto é o destaque máximo — usa-o com parcimônia.',
+      'As cores vão parecer diferentes no fundo escuro — testa sempre num canto primeiro.',
+      'Esta técnica é muito popular em gouache botânico e ilustração de fantasia.'
+    ]
+  },
+  {
+    id: 17, cat: 'gouache', name: 'Gouache + Aguarela',
+    desc: 'Fundo fluido e atmosférico com aguarela, detalhes opacos e brilhantes com gouache.',
+    difficulty: 2,
+    materials: ['Aguarela', 'Gouache', 'Papel aguarela 200g/m²', 'Pincéis variados'],
+    steps: [
+      'Começa com um fundo em aguarela (húmido a húmido ou lavagem). Deixa secar totalmente.',
+      'O gouache é aplicado por cima quando o fundo estiver completamente seco.',
+      'Adiciona os elementos principais e médios com gouache em camadas opacas.',
+      'Os detalhes mais finos e a luz são os últimos elementos a aplicar.',
+      'Usa branco de gouache puro para os brilhos máximos (olhos, pontos de luz, estrelas).',
+      'Podes usar aguarela para sombras transparentes por cima do gouache.'
+    ],
+    tips: [
+      'Esta é a combinação mais versátil — tens o melhor dos dois mundos.',
+      'O fundo de aguarela deve estar 100% seco antes de aplicar o gouache, senão reativa.',
+      'Não diluíres demasiado o gouache — perde a opacidade que é a sua função aqui.',
+      'Ótimo para paisagens com nevoeiro, criaturas fantásticas, retratos atmosféricos.'
+    ]
+  },
+
+  // OUTROS
+  {
+    id: 18, cat: 'outros', name: 'Tinta da China',
+    desc: 'Tinta preta de alta intensidade para linhas expressivas e lavagens monocromáticas.',
+    difficulty: 2,
+    materials: ['Tinta da China preta', 'Papel aguarela ou cartão', 'Pincel', 'Conta-gotas', 'Pena ou palito'],
+    steps: [
+      'Para lavagem: dilui a tinta com muita água — cria tons de cinzento rico.',
+      'Aplica a lavagem como base, do mais claro ao mais escuro, deixando secar entre camadas.',
+      'Para linhas: usa tinta pura (sem diluir) com pena, palito ou pincel fino.',
+      'A pena permite variar a espessura da linha com pressão — mais pressão, mais tinta, linha mais grossa.',
+      'Combina lavagem + linha: fundo em tons de cinzento + detalhes a linha preta pura.',
+      'Experimenta deixar cair gotas de tinta pura sobre a lavagem húmida para efeitos orgânicos.'
+    ],
+    tips: [
+      'Tinta da China é permanente quando seca — não reativa com água. Podes pintar aguarela por cima.',
+      'Ótimo para estudos de natureza, arquitetura, esboços expressivos.',
+      'A combinação lavagem + linha é a base da aguarela Oriental clássica.',
+      'Palito de madeira molhado na tinta dá linhas finas e texturadas interessantes.'
+    ]
+  },
+  {
+    id: 19, cat: 'outros', name: 'Técnica Mista',
+    desc: 'Combinar colagem, lápis, pastel e tinta numa mesma obra para criar textura e narrativa.',
+    difficulty: 2,
+    materials: ['Tinta (qualquer)', 'Papel de jornal/revistas', 'Cola', 'Lápis de cor', 'Pastel'],
+    steps: [
+      'Começa com a colagem como primeiro plano — cola fragmentos de jornal, tecido ou papel.',
+      'Aguarda secar a cola completamente antes de pintar por cima.',
+      'Aplica tinta sobre e em redor dos elementos colados — deixa que as texturas do papel apareçam.',
+      'Usa lápis de cor para detalhes finos e para integrar os elementos colados.',
+      'Pastel seco por cima adiciona textura e suavidade — fixa com verniz ou laca.',
+      'Continua a alternar entre camadas de cola, tinta e desenho até estares satisfeito.'
+    ],
+    tips: [
+      'Não te preocupes com coerência — a combinação de materiais É a estética desta técnica.',
+      'Recortes de revistas com cores ou padrões interessantes enriquecem a composição.',
+      'Texto de jornal visível por baixo da tinta semitransparente cria interesse visual.',
+      'Ótimo para arte abstrata, diários visuais, retratos expressivos.'
+    ]
+  },
+  {
+    id: 20, cat: 'outros', name: 'Marmorizado',
+    desc: 'Tinta flutuando sobre água cria padrões únicos que se transferem para o papel.',
+    difficulty: 3,
+    materials: ['Tinta acrílica muito diluída', 'Recipiente fundo (alguidar)', 'Água', 'Papel', 'Palito'],
+    steps: [
+      'Enche o recipiente com água a 3–5 cm de profundidade.',
+      'Deixa cair gotas de tinta acrílica diluída sobre a superfície da água — a tinta deve flutuar.',
+      'Com um palito, arrasta suavemente a tinta criando padrões (espirais, ondas, flores).',
+      'Trabalha rápido — a tinta começa a misturar-se com a água.',
+      'Coloca o papel sobre a superfície, pressiona levemente, e levanta num movimento fluido.',
+      'Aguarda secar deitado numa superfície plana.'
+    ],
+    tips: [
+      'A tinta acrílica deve estar muito diluída — se afundar, adiciona mais água à tinta.',
+      'Para mais controlo: adiciona CMC (amido) à água para tornar a superfície mais viscosa.',
+      'Cada impressão é única e irrepetível — faz várias enquanto a tinta ainda flutua.',
+      'Ótimo para capas de cadernos, fundos, ou arte abstrata encadernada.'
+    ]
+  },
+  {
+    id: 21, cat: 'outros', name: 'Mono-Print',
+    desc: 'Aplicar tinta numa superfície lisa e transferi-la para papel, criando uma impressão única.',
+    difficulty: 1,
+    materials: ['Tinta acrílica ou aguarela espessa', 'Folha de acetato ou plástico', 'Papel', 'Pincel', 'Rolo ou colher'],
+    steps: [
+      'Aplica tinta sobre a superfície lisa (acetato, vidro, plástico) com pincel ou rolo.',
+      'Cria uma imagem, padrão ou textura na tinta húmida.',
+      'Coloca o papel por cima e pressiona uniformemente com as palmas ou com um rolo.',
+      'Levanta o papel num movimento fluido e contínuo — a imagem transferiu-se.',
+      'A impressão será sempre o espelho da original — considera isso na composição.',
+      'Podes fazer uma segunda impressão mais suave com o mesmo plástico ("ghost print").'
+    ],
+    tips: [
+      'O ghost print (segunda impressão) tem uma qualidade etérea muito interessante.',
+      'Podes desenhar com um palito na tinta antes de imprimir para criar linhas finas.',
+      'Combina com aguarela por cima para adicionar cor à impressão monocromática.',
+      'Ótimo para explorar padrões de folhas — coloca folhas reais sobre a tinta antes de imprimir.'
+    ]
+  },
+
+  // ABORDAGENS
+  {
+    id: 22, cat: 'abordagem', name: 'Paleta Limitada',
+    desc: 'Pintar usando apenas 3 cores primárias. Treina a mistura e compreensão da cor.',
+    difficulty: 2,
+    materials: ['Qualquer tinta', 'Papel adequado ao meio', 'Paleta', 'Pincéis'],
+    steps: [
+      'Escolhe as tuas 3 cores: vermelho, amarelo e azul (ou versões mais específicas).',
+      'Antes de começar, explora todas as misturas possíveis na paleta — cria swatches.',
+      'Identifica quais os tons de que vais precisar na pintura e mistura-os com antecedência.',
+      'Para escurecer, adiciona a cor complementar (não preto) — dá sombras mais ricas.',
+      'Para clarear, adiciona água (aguarela) ou branco (acrílico/gouache).',
+      'Pinta com confiança — a consistência da paleta criará coerência visual automática.'
+    ],
+    tips: [
+      'Começa com: amarelo limão + vermelho primário + azul ultramarine.',
+      'Esta abordagem é a melhor forma de aprender a misturar cores.',
+      'As pinturas com paleta limitada têm sempre harmonia — não há "cores que não combinam".',
+      'Acrescenta branco de gouache/titanium se quiseres clarear sem perder saturação.'
+    ]
+  },
+  {
+    id: 23, cat: 'abordagem', name: 'Monocromático',
+    desc: 'Pintar com apenas uma cor + água ou branco. Foca completamente na luz e sombra.',
+    difficulty: 1,
+    materials: ['1 cor de tinta', 'Papel', 'Pincéis', 'Água (+ branco em acrílico/gouache)'],
+    steps: [
+      'Escolhe uma única cor (ex: azul ultramarine ou sépia).',
+      'Prepara 5 tons diferentes misturando mais ou menos água (ou branco).',
+      'Identifica as grandes zonas de luz, meio-tom e sombra na tua referência.',
+      'Começa pelos tons mais claros, gradualmente escurecendo.',
+      'As zonas de maior contraste (muito claro + muito escuro adjacentes) criam o foco visual.',
+      'Avalia o resultado em preto e branco — se funcionar sem cor, funciona com qualquer paleta.'
+    ],
+    tips: [
+      'É o exercício mais importante para aprender valores (luz e sombra).',
+      'Sépia e azul ultramarino são as cores clássicas para este exercício.',
+      'Com apenas uma cor podes representar qualquer coisa — a cor é secundária à forma.',
+      'Faz pelo menos 3 pinturas monocromáticas antes de adicionares mais cores ao teu trabalho.'
+    ]
+  },
+  {
+    id: 24, cat: 'abordagem', name: 'Do Geral ao Detalhe',
+    desc: 'Construir a pintura por planos: fundo → meio → frente, sempre do geral ao específico.',
+    difficulty: 2,
+    materials: ['Qualquer tinta', 'Papel adequado', 'Pincéis variados'],
+    steps: [
+      'Começa com as cores mais recuadas da composição (céu, horizonte, fundo).',
+      'Usa pincéis grandes e simplifica brutalmente — massas de cor, não detalhes.',
+      'Progride para o plano médio com pincéis médios e formas mais definidas.',
+      'O plano da frente tem os elementos com mais detalhe, contraste e saturação.',
+      'Só quando toda a composição estiver estabelecida é que adicionas os detalhes finais.',
+      'Mantém as tuas marcas e texturas — não cubras tudo com camadas desnecessárias.'
+    ],
+    tips: [
+      'A regra geral: elementos mais distantes são mais claros, menos contrastados e mais frios.',
+      'Resist à tentação de detalhar cedo — constrói sempre a estrutura primeiro.',
+      'Pincéis grandes forçam-te a simplificar. Só muda para pincéis pequenos no final.',
+      'Funciona para aguarela, acrílico, gouache e óleo.'
+    ]
+  },
+  {
+    id: 25, cat: 'abordagem', name: 'Pintura às Cegas',
+    desc: 'Pintar sem olhar para o papel — treina a conexão entre olho, mão e observação.',
+    difficulty: 1,
+    materials: ['Qualquer tinta', 'Papel', 'Pincel'],
+    steps: [
+      'Escolhe um objeto simples como referência.',
+      'Coloca o papel à tua frente mas não olhes para ele durante o exercício.',
+      'Coloca o pincel no papel e começa a pintar observando apenas o objeto.',
+      'Move o pincel em correspondência com o que os teus olhos observam — lento e contínuo.',
+      'Resiste a olhar para o papel durante pelo menos 5 minutos.',
+      'No final, observa o resultado — geralmente tem uma qualidade expressiva e honesta.'
+    ],
+    tips: [
+      'O objetivo não é um resultado "bonito" — é libertar a mão do controlo excessivo.',
+      'Faz este exercício nos primeiros 10 minutos de uma sessão para "aquecer".',
+      'Ótimo para retratos, mãos, plantas — objetos com contornos expressivos.',
+      'Com prática, a coordenação mão-olho melhora visivelmente ao longo do mês.'
+    ]
+  },
+  {
+    id: 26, cat: 'abordagem', name: 'Pintura Negativa',
+    desc: 'Pintar o fundo em redor de um objeto em vez de pintar o objeto diretamente.',
+    difficulty: 3,
+    materials: ['Aguarela ou acrílico', 'Papel', 'Pincéis'],
+    steps: [
+      'Escolhe uma forma simples como sujeito (folha, árvore, jarro).',
+      'Em vez de pintares a forma, pinta o espaço em redor dela — o fundo.',
+      'A forma "aparece" por ser deixada em branco ou claro.',
+      'Adiciona mais camadas de fundo, deixando partes progressivamente visíveis.',
+      'Com várias camadas crias profundidade e sobreposição de formas.',
+      'Funciona especialmente bem para ramos, capim, silhuetas de floresta.'
+    ],
+    tips: [
+      'Planeia a composição antes de começar — uma vez que pintaste o fundo não há retorno.',
+      'Em aguarela, esta técnica aproveita o branco natural do papel ao máximo.',
+      'Experimenta com silhuetas de árvores em camadas sobrepostas — cria floresta com profundidade.',
+      'Combina com masking fluid para proteger as formas mais complexas.'
+    ]
+  },
+  {
+    id: 27, cat: 'abordagem', name: 'Referência vs Memória',
+    desc: 'Pintar o mesmo motivo com referência e depois de memória. Revela o que realmente interiorizaste.',
+    difficulty: 2,
+    materials: ['Qualquer tinta', 'Papel', 'Referência fotográfica ou ao natural'],
+    steps: [
+      'Dia 1: pinta com referência diante de ti, observando detalhadamente.',
+      'Estuda a pintura depois — o que capturaste bem? O que falhaste?',
+      'Dia 2: fecha a referência e pinta o mesmo tema completamente de memória.',
+      'Não reeixes a referência durante a pintura de memória.',
+      'Compara os dois resultados lado a lado.',
+      'Identifica o que retiveste e o que imaginaste — é revelador sobre como percecionas o mundo.'
+    ],
+    tips: [
+      'A pintura de memória tem frequentemente mais expressão e personalidade.',
+      'Os erros na versão de memória mostram-te o que precisas de observar melhor.',
+      'Funciona para qualquer tema — tenta com a tua chávena ou uma flor.',
+      'Repete este exercício mensalmente para ver a tua evolução de observação.'
+    ]
+  }
+];
+
+// MATERIALS DATA
+const materials = [
+  {
+    id: 'aguarela-pastilha', icon: '💧', name: 'Aguarela em Pastilha',
+    desc: 'Ex: Koi Sakura, Winsor & Newton Cotman — ~6–12€',
+    techIds: [1,2,3,4,5,6,7,8,17,22,23,24,25,26,27]
+  },
+  {
+    id: 'acrilico', icon: '🎨', name: 'Tinta Acrílica',
+    desc: 'Pébéo, Maries, Lidl/Action — ~5–10€',
+    techIds: [9,10,11,12,13,14,17,19,20,21,22,23,24,25,26,27]
+  },
+  {
+    id: 'gouache', icon: '⬜', name: 'Gouache',
+    desc: 'Maries, Reeves, Holbein — ~7–15€',
+    techIds: [15,16,17,22,23,24,25,26,27]
+  },
+  {
+    id: 'tinta-china', icon: '🖤', name: 'Tinta da China',
+    desc: '1 frasco preto — ~3–5€',
+    techIds: [18,19,22]
+  },
+  {
+    id: 'papel-aguarela', icon: '📄', name: 'Papel Aguarela 200g',
+    desc: 'Canson, Fabriano budget — ~5–8€ bloco A4',
+    techIds: [1,2,3,4,5,6,7,8,17,18,21,22,23,24,25,26,27]
+  },
+  {
+    id: 'papel-escuro', icon: '🌑', name: 'Papel Escuro / Cartolina',
+    desc: 'Qualquer papelaria — ~1–2€',
+    techIds: [16,19]
+  },
+  {
+    id: 'pinceis', icon: '🖌️', name: 'Pincéis (básicos)',
+    desc: 'Redondo nº2, nº6, plano largo — ~5–10€',
+    techIds: [1,2,3,4,5,6,7,8,9,10,11,15,16,17,18,21,22,23,24,25,26,27]
+  },
+  {
+    id: 'espatula', icon: '🔪', name: 'Espátula / Palette Knife',
+    desc: 'Metálica ou plástico de cozinha — ~0–5€',
+    techIds: [10,13]
+  },
+  {
+    id: 'esponja', icon: '🧽', name: 'Esponja de Cozinha Velha',
+    desc: 'Grátis — já tens em casa',
+    techIds: [7,12]
+  },
+  {
+    id: 'sal', icon: '🧂', name: 'Sal Grosso de Cozinha',
+    desc: 'Grátis — já tens em casa',
+    techIds: [5]
+  },
+  {
+    id: 'vela', icon: '🕯️', name: 'Vela Branca',
+    desc: 'Grátis — já tens em casa',
+    techIds: [6]
+  },
+  {
+    id: 'palito', icon: '🪵', name: 'Palito / Pente Velho',
+    desc: 'Grátis — já tens em casa',
+    techIds: [14,18]
+  },
+  {
+    id: 'colagem', icon: '✂️', name: 'Jornal / Revistas velhas',
+    desc: 'Grátis — reciclagem',
+    techIds: [19]
+  },
+  {
+    id: 'acetato', icon: '📦', name: 'Acetato / Plástico liso',
+    desc: 'Tampa de caixa ou folha plástica — grátis/~1€',
+    techIds: [20,21]
+  }
+];
+
+// IDEAS
+const ideas = [
+  {
+    cat: 'Objetos do quotidiano', icon: '☕',
+    items: ['Uma chávena de café', 'Fruta numa mesa', 'Um par de sapatos', 'Planta de interior',
+      'Uma vela acesa', 'Livros empilhados', 'Óculos de sol', 'Um copo de água com luz a entrar',
+      'Especiarias em frascos', 'Queijo e fruta — natureza morta', 'Tesoura e fio', 'Chaves numa mesa']
+  },
+  {
+    cat: 'Natureza', icon: '🌿',
+    items: ['Uma flor isolada (rosa, girassol, dente-de-leão)', 'Folha de outono detalhada',
+      'Pedras e seixos', 'Casca de árvore texturada', 'Musgo sobre rocha',
+      'Cogumelo', 'Fruto cortado (kiwi, figo, laranja)', 'Ramo com flores silvestres',
+      'Poça de água com reflexo', 'Concha ou búzio', 'Pinha', 'Folha de monstera']
+  },
+  {
+    cat: 'Céu e atmosfera', icon: '🌅',
+    items: ['Pôr do sol com nuvens laranja', 'Céu nublado dramático', 'Noite estrelada simples',
+      'Céu ao amanhecer', 'Chuva numa janela', 'Arco-íris sobre paisagem',
+      'Neblina matinal sobre campo', 'Nuvens com luz por trás', 'Lua cheia']
+  },
+  {
+    cat: 'Paisagem', icon: '🏔️',
+    items: ['Horizonte simples: terra + céu', 'Árvore isolada no inverno',
+      'Rio ou riacho', 'Montanha com neve', 'Campo com flores silvestres',
+      'Floresta com luz filtrada', 'Praia ao entardecer', 'Barco de pesca em repouso']
+  },
+  {
+    cat: 'Arquitetura', icon: '🏛️',
+    items: ['Janela com luz de dentro', 'Uma porta colorida', 'Calçada portuguesa',
+      'Farol', 'Ponte sobre água', 'Rua de aldeia', 'Telhados vistos de cima',
+      'Escadas exteriores com flores', 'Café de bairro']
+  },
+  {
+    cat: 'Abstrato', icon: '🎭',
+    items: ['Pintar uma emoção (raiva, calma, alegria)', 'Uma música em formas e cores',
+      'Formas geométricas simples com sombra', 'Gradiente de cores livre',
+      'Padrão repetitivo (círculos, triângulos)', 'Textura pura sem tema definido',
+      'Cores frias vs cores quentes divididas', 'Composição livre sem plano']
+  },
+  {
+    cat: 'Inspiração pessoal', icon: '💛',
+    items: ['O sítio onde passaste as férias', 'A tua rua ou bairro',
+      'Uma refeição preferida', 'Um objeto com valor sentimental',
+      'O teu cantinho favorito em casa', 'Uma vista que te marcou', 'O teu animal de estimação']
+  }
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let donePaintings = JSON.parse(localStorage.getItem('donePaintings') || '[]');
+
+// ============================================================
+// RENDER TECHNIQUES
+// ============================================================
+function renderTechGrid(filter = 'todas') {
+  const grid = document.getElementById('tech-grid');
+  const filtered = filter === 'todas' ? techniques : techniques.filter(t => t.cat === filter);
+  grid.innerHTML = filtered.map(t => `
+    <div class="tech-card bg-${t.cat}" onclick="openModal(${t.id})">
+      <div class="cat-badge c-${t.cat}">${catLabel(t.cat)}</div>
+      <h3>${t.name}</h3>
+      <p>${t.desc}</p>
+      <span class="arrow">›</span>
+    </div>
+  `).join('');
+}
+
+function filterTech(cat, btn) {
+  document.querySelectorAll('#page-tecnicas .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTechGrid(cat);
+}
+
+function catLabel(cat) {
+  const map = { aguarela: 'Aguarela', acrilico: 'Acrílico', gouache: 'Gouache', outros: 'Outros meios', abordagem: 'Abordagem' };
+  return map[cat] || cat;
+}
+
+// ============================================================
+// MODAL
+// ============================================================
+function openModal(id) {
+  const t = techniques.find(x => x.id === id);
+  if (!t) return;
+  document.getElementById('m-cat').textContent = catLabel(t.cat);
+  document.getElementById('m-cat').className = 'modal-cat c-' + t.cat;
+  document.getElementById('m-title').textContent = t.name;
+  document.getElementById('m-desc').textContent = t.desc;
+
+  const diffLabels = ['', 'Iniciante', 'Fácil', 'Intermédio', 'Avançado'];
+  const diffColors = ['', '#4a7c59', '#4a7c59', '#b8922a', '#c4622d'];
+  document.getElementById('m-diff').innerHTML = `
+    <div class="diff-dot" style="background:${diffColors[t.difficulty]}"></div>
+    <span>${diffLabels[t.difficulty]}</span>`;
+
+  document.getElementById('m-mats').innerHTML = t.materials.map(m =>
+    `<span class="mat-pill">${m}</span>`).join('');
+
+  document.getElementById('m-steps').innerHTML = t.steps.map((s, i) =>
+    `<div class="step"><div class="step-num">${i+1}</div><div class="step-text">${s}</div></div>`).join('');
+
+  document.getElementById('m-tips').innerHTML = t.tips.map(tip =>
+    `<div class="tip-item">${tip}</div>`).join('');
+
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (!e || e.target === document.getElementById('modal-overlay')) {
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ============================================================
+// MATERIAL PAGE
+// ============================================================
+function renderMatList() {
+  document.getElementById('mat-list').innerHTML = materials.map(m => `
+    <div class="mat-item" onclick="selectMat('${m.id}', this)">
+      <span class="mat-icon">${m.icon}</span>
+      <div>
+        <div style="font-weight:500">${m.name}</div>
+        <div style="font-size:11px;opacity:0.7;margin-top:2px">${m.desc}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectMat(matId, el) {
+  document.querySelectorAll('.mat-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  const mat = materials.find(m => m.id === matId);
+  const techs = techniques.filter(t => mat.techIds.includes(t.id));
+  document.getElementById('mat-results').innerHTML = `
+    <h3 style="margin-bottom:1rem;font-size:14px;color:var(--ink2)">
+      ${techs.length} técnicas com <strong>${mat.name}</strong>
+    </h3>
+    <div class="mat-tech-grid">
+      ${techs.map(t => `
+        <div class="mat-tech-card" onclick="openModal(${t.id})">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink3);margin-bottom:4px">${catLabel(t.cat)}</div>
+          <h4>${t.name}</h4>
+          <p>${t.desc}</p>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+// ============================================================
+// IDEAS PAGE
+// ============================================================
+function renderIdeas() {
+  const total = ideas.reduce((sum, s) => sum + s.items.length, 0);
+  document.getElementById('total-count').textContent = total;
+  updateDoneCount();
+
+  document.getElementById('ideas-content').innerHTML = `
+    <div class="ideas-intro">
+      <div class="num">30</div>
+      <div>
+        <h2>O teu desafio começa aqui</h2>
+        <p>Clica numa ideia para a marcar como pintada. As ideias são sugestões — sente-te livre para as adaptar.</p>
+      </div>
+    </div>
+    ${ideas.map(s => `
+      <div class="ideas-section">
+        <div class="ideas-section-title">${s.icon} ${s.cat}</div>
+        <div class="ideas-grid">
+          ${s.items.map(item => `
+            <div class="idea-card ${donePaintings.includes(item) ? 'done' : ''}"
+                 onclick="toggleIdea(this, '${item.replace(/'/g,'\\\'')}')"
+                 title="Clica para marcar como feita">
+              ${item}
+              ${donePaintings.includes(item) ? '<span class="done-mark">✓</span>' : ''}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `).join('')}
+  `;
+}
+
+function toggleIdea(el, item) {
+  const idx = donePaintings.indexOf(item);
+  if (idx >= 0) {
+    donePaintings.splice(idx, 1);
+    el.classList.remove('done');
+    const mark = el.querySelector('.done-mark');
+    if (mark) mark.remove();
+  } else {
+    donePaintings.push(item);
+    el.classList.add('done');
+    el.insertAdjacentHTML('beforeend', '<span class="done-mark">✓</span>');
+  }
+  localStorage.setItem('donePaintings', JSON.stringify(donePaintings));
+  updateDoneCount();
+}
+
+function updateDoneCount() {
+  document.getElementById('done-count').textContent = donePaintings.length;
+}
+
+// ============================================================
+// PAGE NAVIGATION
+// ============================================================
+function showPage(page, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+renderTechGrid();
+renderMatList();
+renderIdeas();
 </script>
+</body>
+</html>
