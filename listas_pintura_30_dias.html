@@ -1,0 +1,164 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.wrap { padding: 1rem 0 2rem; font-family: var(--font-sans); }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.5rem; }
+.tab { padding: 7px 16px; font-size: 13px; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); background: transparent; cursor: pointer; color: var(--color-text-secondary); transition: all 0.15s; }
+.tab:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
+.tab.active { background: var(--color-background-secondary); color: var(--color-text-primary); border-color: var(--color-border-primary); font-weight: 500; }
+.section { margin-bottom: 1.5rem; }
+.section-title { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-secondary); margin-bottom: 8px; padding-bottom: 6px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px; }
+.item { display: flex; align-items: flex-start; gap: 8px; padding: 8px 10px; background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); font-size: 13px; color: var(--color-text-primary); line-height: 1.45; }
+.item .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+.item .sub { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+.badge { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 10px; margin-left: 6px; vertical-align: middle; font-weight: 500; }
+.tip { font-size: 12px; color: var(--color-text-secondary); background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; margin-top: 1rem; border-left: 2px solid var(--color-border-secondary); }
+</style>
+<div class="wrap">
+  <div class="tabs">
+    <button class="tab active" onclick="show('tecnicas',this)">Técnicas</button>
+    <button class="tab" onclick="show('material',this)">Material</button>
+    <button class="tab" onclick="show('ideias',this)">Ideias para pintar</button>
+  </div>
+  <div id="content"></div>
+</div>
+<script>
+const pages = {
+tecnicas: {
+  sections: [
+    { title: "Aguarela", color: "#378ADD", items: [
+      { name: "Húmido a húmido", sub: "Papel molhado → cores fundem-se" },
+      { name: "Húmido a seco", sub: "Papel seco → bordos nítidos" },
+      { name: "Lavagem plana", sub: "Fundo de cor uniforme" },
+      { name: "Lavagem graduada", sub: "Cor que desvanece" },
+      { name: "Glazing", sub: "Camadas transparentes sobrepostas" },
+      { name: "Granulação com sal", sub: "Sal grosso na tinta húmida" },
+      { name: "Reservas com cera", sub: "Vela branca antes de pintar" },
+      { name: "Lifting", sub: "Remover tinta húmida com papel" },
+      { name: "Splatter", sub: "Respingar tinta com pincel" },
+    ]},
+    { title: "Acrílico", color: "#7F77DD", items: [
+      { name: "Camadas opacas", sub: "Cobertura total, estilo óleo" },
+      { name: "Acrílico diluído", sub: "Imitação de aguarela" },
+      { name: "Impasto", sub: "Tinta espessa, textura em relevo" },
+      { name: "Dry brush", sub: "Pincel quase seco, textura áspera" },
+      { name: "Sponging", sub: "Esponja em vez de pincel" },
+      { name: "Palette knife", sub: "Espátula em vez de pincel" },
+      { name: "Glazing acrílico", sub: "Verniz diluído sobre camada seca" },
+      { name: "Scratching", sub: "Riscar tinta húmida com palito" },
+    ]},
+    { title: "Gouache", color: "#1D9E75", items: [
+      { name: "Flat colour", sub: "Cor opaca e plana, estilo design" },
+      { name: "Gouache sobre escuro", sub: "Branco e cores claras sobre fundo escuro" },
+      { name: "Gouache + aguarela", sub: "Fundo fluido + detalhes opacos" },
+    ]},
+    { title: "Outros meios", color: "#D85A30", items: [
+      { name: "Tinta da China", sub: "Linhas e lavagens monocromáticas" },
+      { name: "Técnica mista", sub: "Colagem, lápis, pastel + tinta" },
+      { name: "Marmorizado", sub: "Tinta flutuante sobre água" },
+      { name: "Mono-print", sub: "Imprimir de uma superfície lisa" },
+    ]},
+    { title: "Abordagens / formas de pintar", color: "#BA7517", items: [
+      { name: "Paleta limitada (3 cores)", sub: "Treino de mistura de cor" },
+      { name: "Monocromático", sub: "1 cor + água/branco" },
+      { name: "Esboço rápido pintado", sub: "10 min esboço + 50 min cor" },
+      { name: "Pintura às cegas", sub: "Não olhar para o papel" },
+      { name: "Do geral ao detalhe", sub: "Fundo → meio → frente" },
+      { name: "De memória", sub: "Sem referência visual" },
+      { name: "Negativo painting", sub: "Pintar o fundo, não o objeto" },
+    ]}
+  ],
+  tip: "Não precisas de ter todos os meios — aguarela e gouache com os mesmos pincéis já chegam para experimentar a maioria destas técnicas."
+},
+material: {
+  sections: [
+    { title: "Tintas — escolhe 1 ou 2 tipos para começar", color: "#7F77DD", items: [
+      { name: "Aguarela em pastilha", sub: "Ex: Koi Sakura 12 cores · ~6–10€", badge: "essencial" },
+      { name: "Gouache básico", sub: "Ex: Maries ou Reeves 12 cores · ~7–12€", badge: "essencial" },
+      { name: "Acrílico básico", sub: "Pébéo ou Lidl/Action · ~5–10€", badge: "opcional" },
+      { name: "Tinta da China preta", sub: "1 frasco · ~3–5€", badge: "opcional" },
+    ]},
+    { title: "Pincéis — o mínimo que precisas", color: "#1D9E75", items: [
+      { name: "Pincel redondo nº 6–8", sub: "Para fundos e áreas médias" },
+      { name: "Pincel redondo nº 2–3", sub: "Para detalhes" },
+      { name: "Pincel plano largo", sub: "Para lavagens de fundo" },
+      { name: "Pincel velho/esponja", sub: "Para texturas e splatter" },
+    ]},
+    { title: "Papel — não poupes aqui", color: "#D85A30", items: [
+      { name: "Papel aguarela 200g/m² A4", sub: "Bloco 20 folhas · ~5–8€ · Canson, Fabriano budget" , badge: "essencial" },
+      { name: "Papel liso/cartolina", sub: "Para gouache e acrílico · ~1–2€" },
+      { name: "Caderno de esboços A5", sub: "Para estudos rápidos · ~3–5€" },
+    ]},
+    { title: "Extras úteis e baratos", color: "#BA7517", items: [
+      { name: "Sal grosso de cozinha", sub: "Efeito granulação na aguarela · grátis" },
+      { name: "Vela branca", sub: "Reservas de cera · grátis/já tens" },
+      { name: "Palitos de madeira", sub: "Scratching e detalhes · grátis" },
+      { name: "Prato velho / tampa plástica", sub: "Serve de paleta · grátis" },
+      { name: "Fita crepe ou washi tape", sub: "Prender papel e criar bordos · ~1–2€" },
+      { name: "Esponja de cozinha velha", sub: "Texturas · grátis" },
+      { name: "Conta-gotas ou seringa", sub: "Dosear água · grátis" },
+      { name: "Copo e papel absorvente", sub: "Limpar pincéis · grátis" },
+    ]},
+  ],
+  tip: "Orçamento total estimado para começar: 20–35€. Compra primeiro aguarela em pastilha + papel 200g + 3 pincéis. O resto vai comprando aos poucos."
+},
+ideias: {
+  sections: [
+    { title: "Objetos do quotidiano", color: "#7F77DD", items: [
+      {name:"Uma chávena de café"},{name:"Fruta sobre a mesa"},{name:"Um par de sapatos"},{name:"Planta de interior"},
+      {name:"Uma vela acesa"},{name:"Livros empilhados"},{name:"Óculos de sol"},{name:"Um copo de água com luz"},
+      {name:"Especiarias em frascos"},{name:"Queijo e fruta — natureza morta simples"},
+    ]},
+    { title: "Natureza", color: "#1D9E75", items: [
+      {name:"Uma flor isolada (dente-de-leão, rosa, girassol)"},{name:"Folha de outono detalhada"},
+      {name:"Pedras e seixos"},{name:"Casca de árvore texturada"},{name:"Musgo sobre rocha"},
+      {name:"Cogumelo"},{name:"Fruto cortado ao meio (kiwi, figo, laranja)"},{name:"Ramo com flores silvestres"},
+      {name:"Poça de água com reflexo"},{name:"Concha ou búzio"},
+    ]},
+    { title: "Céu e luz", color: "#378ADD", items: [
+      {name:"Pôr do sol com nuvens laranja"},{name:"Céu nublado dramático"},{name:"Noite estrelada simples"},
+      {name:"Céu ao amanhecer"},{name:"Chuva numa janela"},{name:"Arco-íris esquemático"},
+      {name:"Neblina matinal sobre campo"},{name:"Nuvens com luz por trás"},
+    ]},
+    { title: "Paisagem e arquitetura", color: "#D85A30", items: [
+      {name:"Horizonte simples: terra + céu"},{name:"Árvore isolada no inverno (sem folhas)"},
+      {name:"Rio ou riacho"},{name:"Janela com luz de dentro"},{name:"Uma porta colorida"},
+      {name:"Calçada portuguesa (padrão)"},{name:"Farol"},{name:"Ponte sobre água"},
+      {name:"Rua de aldeia"},{name:"Telhados vistos de cima"},
+    ]},
+    { title: "Abstrato e experimental", color: "#BA7517", items: [
+      {name:"Pintar uma emoção (raiva, calma, alegria)"},{name:"Uma música que estás a ouvir em formas"},
+      {name:"Formas geométricas simples com sombra"},{name:"Gradiente de cores sem forma"},
+      {name:"Padrão repetitivo (círculos, triângulos)"},{name:"Textura pura (sem tema)"},
+      {name:"Cores frias vs cores quentes — divisão da tela"},{name:"Rabisco pintado (sem plano)"},
+    ]},
+    { title: "Inspiração pessoal / memória", color: "#639922", items: [
+      {name:"O sítio onde passaste as férias"},{name:"A tua rua ou bairro"},
+      {name:"Uma refeição preferida"},{name:"Um objeto com valor sentimental"},
+      {name:"O teu cantinho favorito em casa"},{name:"Uma vista que te marcou"},
+    ]},
+  ],
+  tip: "Quando não souberes o que pintar, olha à volta — a chávena na tua mesa ou a janela mais próxima já são motivos suficientes."
+}
+};
+
+function show(page, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  if(el) el.classList.add('active');
+  const p = pages[page];
+  let html = '';
+  p.sections.forEach(s => {
+    html += `<div class="section"><div class="section-title">${s.title}</div><div class="items-grid">`;
+    s.items.forEach(item => {
+      const badge = item.badge ? `<span class="badge" style="background:${s.color}22;color:${s.color}">${item.badge}</span>` : '';
+      const sub = item.sub ? `<div class="sub">${item.sub}</div>` : '';
+      html += `<div class="item"><div class="dot" style="background:${s.color};margin-top:${item.sub?'5':'7'}px"></div><div><div>${item.name}${badge}</div>${sub}</div></div>`;
+    });
+    html += `</div></div>`;
+  });
+  html += `<div class="tip">${p.tip}</div>`;
+  document.getElementById('content').innerHTML = html;
+}
+show('tecnicas');
+</script>
